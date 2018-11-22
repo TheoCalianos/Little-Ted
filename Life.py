@@ -1,10 +1,10 @@
-import config
 import discord
 from discord.ext.commands import Bot
 from discord.ext import commands
 import asyncio
 import time
 import random
+
 Client = discord.Client()
 client = commands.Bot(command_prefix ="!")
 
@@ -19,7 +19,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!guess'):
+    elif message.content.startswith('!guess'):
         await client.send_message(message.channel, 'Guess a number between 1 to 100')
 
         def guess_check(m):
@@ -47,5 +47,10 @@ async def on_message(message):
                 else:
                     await client.send_message(message.channel, 'Sorry. It is actually {}.'.format(answer))
 
+@client.event
+async def on_member_join(member):
+    server = member.server
+    fmt = 'Welcome {0.mention} to a wellcome to the crew!'
+    await client.send_message(server, fmt.format(member))
 
-client.run("NTE0MjUyMTI3NDQ3Njc5MDIx.Dtb5tw.CrwqpPpCh_TQ3uVNNXay3KM32n8")
+client.run("NTE0MjUyMTI3NDQ3Njc5MDIx.DtcbtA.pfV7ZCrH1Q5x9elQJN_JI5GavqY")
