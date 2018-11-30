@@ -291,6 +291,10 @@ class Music:
         answer = random.choice(["It is certain", "Most likely.", "Ask again later", "My reply is no"])
         await bot.say(f"🎱{answer}")
     @commands.command(pass_context=True, no_pm=True)
+    async def coinflip(self, ctx,):
+        answer = random.choice(["Heads", "Tails"])
+        await bot.say(f"{answer}")
+    @commands.command(pass_context=True, no_pm=True)
     async def roll(self, ctx,):
         answer = random.randint(1,6)
         await bot.say(f"{answer}")
@@ -309,4 +313,4 @@ async def on_member_join(member):
     fmt = 'Welcome {0.mention} to a wellcome to the crew!'
     await bot.send_message(server, fmt.format(member))
 
-bot.run("NTE0MjUyMTI3NDQ3Njc5MDIx.Dt-irg.AxaE_PhjgBKUjre4yv6WrCnluEo")
+bot.run("NTE0MjUyMTI3NDQ3Njc5MDIx.DuJMTQ.WH_EnwN9Rxm063JbwYK74ZsjsWc")
