@@ -5,7 +5,9 @@ from discord.ext import commands
 import time
 import code
 import random
-
+import aiohttp
+import functools
+import config
 if not discord.opus.is_loaded():
     # the 'opus' library here is opus.dll on windows
     # or libopus.so on linux in the current directory
@@ -303,6 +305,31 @@ class Music:
         answer = random.randint(1,32)
         await bot.say(f"{answer}")
 
+    @commands.command(pass_context=True, name="random")
+    async def random(self, ctx, *, term: str=None):
+        """Retrieves a random image from Imgur
+        Search terms can be specified"""
+        if term is None:
+            task = functools.partial(self.imgur.gallery_random, page=0)
+        else:
+            task = functools.partial(self.imgur.gallery_search, term,
+                                     advanced=None, sort='time',
+                                     window='all', page=0)
+        task = self.bot.loop.run_in_executor(None, task)
+
+        try:
+            results = await asyncio.wait_for(task, timeout=10)
+        except asyncio.TimeoutError:
+            await self.bot.say("Error: request timed out")
+        else:
+            if results:
+                item = choice(results)
+                link = item.gifv if hasattr(item, "gifv") else item.link
+                await self.bot.say(link)
+            else:
+                await self.bot.say("Your search terms gave no results.")
+
+
 bot.add_cog(Music(bot))
 @bot.event
 async def on_ready():
@@ -313,4 +340,4 @@ async def on_member_join(member):
     fmt = 'Welcome {0.mention} to a wellcome to the crew!'
     await bot.send_message(server, fmt.format(member))
 
-bot.run("NTE0MjUyMTI3NDQ3Njc5MDIx.DuJMTQ.WH_EnwN9Rxm063JbwYK74ZsjsWc")
+bot.run(config.Ted_key)
