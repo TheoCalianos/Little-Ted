@@ -5,8 +5,6 @@ from discord.ext import commands
 import time
 import code
 import random
-import aiohttp
-import functools
 import config
 if not discord.opus.is_loaded():
     # the 'opus' library here is opus.dll on windows
@@ -16,11 +14,13 @@ if not discord.opus.is_loaded():
     # note that on windows this DLL is automatically provided for you
     discord.opus.load_opus('opus')
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('$'), description='A playlist example for discord.py')
+
 class VoiceEntry:
     def __init__(self, message, player):
         self.requester = message.author
         self.channel = message.channel
         self.player = player
+
 
     def __str__(self):
         fmt = '*{0.title}* uploaded by {0.uploader} and requested by {1.display_name}'
@@ -93,17 +93,6 @@ class Music:
                 pass
 
     @commands.command(pass_context=True, no_pm=True)
-    async def summon(self, ctx, *, channel : discord.Channel):
-        try:
-            await self.create_voice_client(channel)
-        except discord.ClientException:
-            await self.bot.say('Already in a voice channel...')
-        except discord.InvalidArgument:
-            await self.bot.say('This is not a voice channel...')
-        else:
-            await self.bot.say('Ready to play audio in ' + channel.name)
-
-    @commands.command(pass_context=True, no_pm=True)
     async def cookie(self, ctx):
         await self.bot.say(":cookie:")
 
@@ -148,18 +137,6 @@ class Music:
             await state.voice.move_to(join_channel)
 
         return True
-    @commands.command(pass_context=True, no_pm=True)
-    async def join(self, ctx, *, channel : discord.Channel):
-        """Joins a voice channel."""
-        try:
-            await self.create_voice_client(channel)
-        except discord.ClientException:
-            await self.bot.say('Already in a voice channel...')
-        except discord.InvalidArgument:
-            await self.bot.say('This is not a voice channel...')
-        else:
-            await self.bot.say('Ready to play audio in ' + channel.name)
-
     @commands.command(pass_context=True, no_pm=True)
     async def summon(self, ctx):
         """Summons the bot to join your voice channel."""
@@ -305,31 +282,6 @@ class Music:
         answer = random.randint(1,32)
         await bot.say(f"{answer}")
 
-    @commands.command(pass_context=True, name="random")
-    async def random(self, ctx, *, term: str=None):
-        """Retrieves a random image from Imgur
-        Search terms can be specified"""
-        if term is None:
-            task = functools.partial(self.imgur.gallery_random, page=0)
-        else:
-            task = functools.partial(self.imgur.gallery_search, term,
-                                     advanced=None, sort='time',
-                                     window='all', page=0)
-        task = self.bot.loop.run_in_executor(None, task)
-
-        try:
-            results = await asyncio.wait_for(task, timeout=10)
-        except asyncio.TimeoutError:
-            await self.bot.say("Error: request timed out")
-        else:
-            if results:
-                item = choice(results)
-                link = item.gifv if hasattr(item, "gifv") else item.link
-                await self.bot.say(link)
-            else:
-                await self.bot.say("Your search terms gave no results.")
-
-
 bot.add_cog(Music(bot))
 @bot.event
 async def on_ready():
@@ -340,4 +292,4 @@ async def on_member_join(member):
     fmt = 'Welcome {0.mention} to a wellcome to the crew!'
     await bot.send_message(server, fmt.format(member))
 
-bot.run(config.Ted_key)
+bot.run(config.Ted)

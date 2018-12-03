@@ -1,24 +1,5 @@
-# README
+#Little Ted
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* python 3.6
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Little Ted is a music bot for the application discord. Discord Is a voice chat app.  So it will get videos off youtube and then play the audio in the chat room. The bot as well has a eight ball function, coinflipper, finally roll a six or 32 sided die. 
