@@ -1,1 +1,1 @@
-worker: python3.6 life.py
+worker: python3.6 Life.py
