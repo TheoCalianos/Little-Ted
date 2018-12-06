@@ -97,7 +97,7 @@ class Music:
         await self.bot.say(":cookie:")
 
     @commands.command(pass_context=True, no_pm=True)
-    async def guess(ctx):
+    async def guess(self, ctx):
         def guess_check(m):
             return m.content.isdigit()
         await bot.say('Guess a number between 1 to 100')
@@ -281,6 +281,10 @@ class Music:
     async def roll32(self, ctx,):
         answer = random.randint(1,32)
         await bot.say(f"{answer}")
+    @commands.command(pass_context=True, no_pm=True)
+    async def intLevels(self, ctx,):
+        answer = random.randint(1,10)
+        await bot.say(f"I am clocking thier int levels at {answer}/10")
 
 bot.add_cog(Music(bot))
 @bot.event
