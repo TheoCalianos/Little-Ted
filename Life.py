@@ -97,7 +97,7 @@ class Music:
         await self.bot.say(":cookie:")
 
     @commands.command(pass_context=True, no_pm=True)
-    async def guess():
+    async def guess(self):
         def guess_check(m):
             return m.content.isdigit()
         await bot.say('Guess a number between 1 to 100')
@@ -266,23 +266,23 @@ class Music:
             skip_count = len(state.skip_votes)
             await self.bot.say('Now playing {} [skips: {}/3]'.format(state.current, skip_count))
     @commands.command(aliases=['8ball'])
-    async def eightball():
+    async def eightball(self):
         answer = random.choice(["It is certain", "Most likely.", "Ask again later", "My reply is no"])
         await bot.say(f"🎱{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def coinflip():
+    async def coinflip(self):
         answer = random.choice(["Heads", "Tails"])
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def roll():
+    async def roll(self):
         answer = random.randint(1,6)
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def roll32():
+    async def roll32(self):
         answer = random.randint(1,32)
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def intLevels():
+    async def intLevels(self):
         answer = random.randint(1,10)
         await bot.say(f"I am clocking thier int levels at {answer}/10")
 
