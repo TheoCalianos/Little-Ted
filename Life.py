@@ -278,7 +278,7 @@ class Music:
         answer = random.randint(1,6)
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def roll32(,):
+    async def roll32():
         answer = random.randint(1,32)
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
