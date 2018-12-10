@@ -97,7 +97,7 @@ class Music:
         await self.bot.say(":cookie:")
 
     @commands.command(pass_context=True, no_pm=True)
-    async def guess(self):
+    async def guess(self, cxt):
         def guess_check(m):
             return m.content.isdigit()
         await bot.say('Guess a number between 1 to 100')
@@ -125,7 +125,7 @@ class Music:
                     await bot.say('Sorry. It is actually {}.'.format(answer))
     @commands.command(pass_context=True, no_pm=True)
     async def join(self, ctx):
-        join_channel = ctx.message.author.voice_channel
+        join_channel = ctx.message.author.voice.voice_channel
         if join_channel is None:
             await self.bot.say('You are not in a voice channel.')
             return False
@@ -140,7 +140,7 @@ class Music:
     @commands.command(pass_context=True, no_pm=True)
     async def summon(self, ctx):
         """Summons the bot to join your voice channel."""
-        summoned_channel = ctx.message.author.voice_channel
+        summoned_channel = ctx.message.author.voice.voice_channel
         if summoned_channel is None:
             await self.bot.say('You are not in a voice channel.')
             return False
@@ -266,23 +266,23 @@ class Music:
             skip_count = len(state.skip_votes)
             await self.bot.say('Now playing {} [skips: {}/3]'.format(state.current, skip_count))
     @commands.command(aliases=['8ball'])
-    async def eightball(self):
+    async def eightball(self, cxt):
         answer = random.choice(["It is certain", "Most likely.", "Ask again later", "My reply is no"])
         await bot.say(f"🎱{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def coinflip(self):
+    async def coinflip(self, cxt):
         answer = random.choice(["Heads", "Tails"])
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def roll(self):
+    async def roll(self, cxt):
         answer = random.randint(1,6)
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def roll32(self):
+    async def roll32(self, cxt):
         answer = random.randint(1,32)
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def intLevels(self):
+    async def intLevels(self, cxt):
         answer = random.randint(1,10)
         await bot.say(f"I am clocking thier int levels at {answer}/10")
 
