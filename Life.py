@@ -81,7 +81,7 @@ class Music:
 
     async def create_voice_client(self, channel):
         voice = await self.bot.join_voice_channel(channel)
-        state = self.get_voice_state(channel.guild)
+        state = self.get_voice_state(channel.server)
         state.voice = voice
     def __unload(self):
         for state in self.voice_states.values():
@@ -97,7 +97,7 @@ class Music:
         await self.bot.say(":cookie:")
 
     @commands.command(pass_context=True, no_pm=True)
-    async def guess():
+    async def guess(self, cxt):
         def guess_check(m):
             return m.content.isdigit()
         await bot.say('Guess a number between 1 to 100')
@@ -125,12 +125,12 @@ class Music:
                     await bot.say('Sorry. It is actually {}.'.format(answer))
     @commands.command(pass_context=True, no_pm=True)
     async def join(self, ctx):
-        join_channel = ctx.message.author.voice_channel
+        join_channel = ctx.message.author.voice.voice_channel
         if join_channel is None:
             await self.bot.say('You are not in a voice channel.')
             return False
 
-        state = self.get_voice_state(ctx.message.guild)
+        state = self.get_voice_state(ctx.message.server)
         if state.voice is None:
             state.voice = await self.bot.join_voice_channel(join_channel)
         else:
@@ -140,12 +140,12 @@ class Music:
     @commands.command(pass_context=True, no_pm=True)
     async def summon(self, ctx):
         """Summons the bot to join your voice channel."""
-        summoned_channel = ctx.message.author.voice_channel
+        summoned_channel = ctx.message.author.voice.voice_channel
         if summoned_channel is None:
             await self.bot.say('You are not in a voice channel.')
             return False
 
-        state = self.get_voice_state(ctx.message.guild)
+        state = self.get_voice_state(ctx.message.server)
         if state.voice is None:
             state.voice = await self.bot.join_voice_channel(summoned_channel)
         else:
@@ -162,7 +162,7 @@ class Music:
         The list of supported sites can be found here:
         https://rg3.github.io/youtube-dl/supportedsites.html
         """
-        state = self.get_voice_state(ctx.message.guild)
+        state = self.get_voice_state(ctx.message.server)
         opts = {
             'default_search': 'auto',
             'quiet': True,
@@ -188,7 +188,7 @@ class Music:
     async def volume(self, ctx, value : int):
         """Sets the volume of the currently playing song."""
 
-        state = self.get_voice_state(ctx.message.guild)
+        state = self.get_voice_state(ctx.message.server)
         if state.is_playing():
             player = state.player
             player.volume = value / 100
@@ -197,7 +197,7 @@ class Music:
     @commands.command(pass_context=True, no_pm=True)
     async def pause(self, ctx):
         """Pauses the currently played song."""
-        state = self.get_voice_state(ctx.message.guild)
+        state = self.get_voice_state(ctx.message.server)
         if state.is_playing():
             player = state.player
             player.pause()
@@ -205,7 +205,7 @@ class Music:
     @commands.command(pass_context=True, no_pm=True)
     async def resume(self, ctx):
         """Resumes the currently played song."""
-        state = self.get_voice_state(ctx.message.guild)
+        state = self.get_voice_state(ctx.message.server)
         if state.is_playing():
             player = state.player
             player.resume()
@@ -215,7 +215,7 @@ class Music:
         """Stops playing audio and leaves the voice channel.
         This also clears the queue.
         """
-        server = ctx.message.guild
+        server = ctx.message.server
         state = self.get_voice_state(server)
 
         if state.is_playing():
@@ -235,7 +235,7 @@ class Music:
         3 skip votes are needed for the song to be skipped.
         """
 
-        state = self.get_voice_state(ctx.message.guild)
+        state = self.get_voice_state(ctx.message.server)
         if not state.is_playing():
             await self.bot.say('Not playing any music right now...')
             return
@@ -259,30 +259,30 @@ class Music:
     async def playing(self, ctx):
         """Shows info about the currently played song."""
 
-        state = self.get_voice_state(ctx.message.guild)
+        state = self.get_voice_state(ctx.message.server)
         if state.current is None:
             await self.bot.say('Not playing anything.')
         else:
             skip_count = len(state.skip_votes)
             await self.bot.say('Now playing {} [skips: {}/3]'.format(state.current, skip_count))
     @commands.command(aliases=['8ball'])
-    async def eightball():
+    async def eightball(self, cxt):
         answer = random.choice(["It is certain", "Most likely.", "Ask again later", "My reply is no"])
         await bot.say(f"🎱{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def coinflip():
+    async def coinflip(self, cxt):
         answer = random.choice(["Heads", "Tails"])
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def roll():
+    async def roll(self, cxt):
         answer = random.randint(1,6)
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def roll32(,):
+    async def roll32(self, cxt):
         answer = random.randint(1,32)
         await bot.say(f"{answer}")
     @commands.command(pass_context=True, no_pm=True)
-    async def intLevels():
+    async def intLevels(self, cxt):
         answer = random.randint(1,10)
         await bot.say(f"I am clocking thier int levels at {answer}/10")
 
@@ -292,7 +292,7 @@ async def on_ready():
     print("Bot is ready!")
 @bot.event
 async def on_member_join(member):
-    server = member.guild
+    server = member.server
     fmt = 'Welcome {0.mention} to a wellcome to the crew!'
     await bot.send_message(server, fmt.format(member))
 
